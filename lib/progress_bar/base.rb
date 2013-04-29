@@ -123,23 +123,13 @@ class ProgressBar
     end
 
     def with_progressables(action, *args)
-      if args.empty?
-        @bar.send(action)
-        @estimated_time.send(action)
-      else
-        @bar.send(action, *args)
-        @estimated_time.send(action, *args)
-      end
+      @bar.send(action, *args)
+      @estimated_time.send(action, *args)
     end
 
     def with_timers(action, *args)
-      if args.empty?
-        @estimated_time.send(action)
-        @elapsed_time.send(action)
-      else
-        @estimated_time.send(action, *args)
-        @elapsed_time.send(action, *args)
-      end
+      @estimated_time.send(action, *args)
+      @elapsed_time.send(action, *args)
     end
 
     def with_update
