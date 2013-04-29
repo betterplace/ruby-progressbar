@@ -3,18 +3,17 @@ class ProgressBar
     DEPRECATION_DATE = "June 30th, 2013"
 
     def backwards_compatible_args_to_options_conversion(args)
-      options = {}
-
-      if args.size > 1
-        puts "DEPRECATION WARNING: Creating progress bars using ProgressBar.new(title, total, output_io) has been deprecated and will be removed on or after #{DEPRECATION_DATE}.  Please use ProgressBar.create(:title => title, :total => total, :output => output_io) instead. The full list of options can be found here: https://github.com/jfelchner/ruby-progressbar."
-        options[:title]  = args[0]
-        options[:total]  = args[1]
-        options[:output] = args[2]
+      case args.size
+      when 0 then {}
+      when 1 then args[0]
       else
-        options = args[0]
+        puts "DEPRECATION WARNING: Creating progress bars using ProgressBar.new(title, total, output_io) has been deprecated and will be removed on or after #{DEPRECATION_DATE}.  Please use ProgressBar.create(:title => title, :total => total, :output => output_io) instead. The full list of options can be found here: https://github.com/jfelchner/ruby-progressbar."
+        {
+          :title  => args[0],
+          :total  => args[1],
+          :output => args[2]
+        }
       end
-
-      options
     end
 
     def inc(value = nil)
