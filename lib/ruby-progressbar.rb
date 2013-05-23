@@ -1,3 +1,4 @@
+require 'term/ansicolor'
 require 'progress_bar/depreciable'
 require 'progress_bar/length_calculator'
 require 'progress_bar/running_average_calculator'

@@ -41,4 +41,5 @@ THEDOCTOR
   s.add_development_dependency('guard',       '~> 1.4')
   s.add_development_dependency('guard-rspec', '~> 2.1')
   s.add_development_dependency('rb-fsevent',  '~> 0.9')
+  s.add_dependency('term-ansicolor', '~> 1.2')
 end
