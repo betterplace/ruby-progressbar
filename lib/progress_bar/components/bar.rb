@@ -30,7 +30,7 @@ class ProgressBar
       end
 
       def empty_string
-        ' ' * (length - completed_length)
+        ' ' * [ length - completed_length, 0 ].max
       end
 
     private
