@@ -1,19 +1,17 @@
-require 'progress_bar/depreciable'
-require 'progress_bar/length_calculator'
-require 'progress_bar/running_average_calculator'
-require 'progress_bar/formatter'
-require 'progress_bar/components'
-require 'progress_bar/format'
-require 'progress_bar/base'
+require 'ruby-progressbar/output'
+require 'ruby-progressbar/outputs/tty'
+require 'ruby-progressbar/outputs/non_tty'
+require 'ruby-progressbar/timer'
+require 'ruby-progressbar/progress'
+require 'ruby-progressbar/throttle'
+require 'ruby-progressbar/calculators/length'
+require 'ruby-progressbar/calculators/running_average'
+require 'ruby-progressbar/components'
+require 'ruby-progressbar/format'
+require 'ruby-progressbar/base'
 
 class ProgressBar
-  def self.new(*args)
-    puts "DEPRECATION WARNING: Calling `ProgressBar.new` is deprecated and will be removed on or after #{ProgressBar::Depreciable::DEPRECATION_DATE}.  Please use `ProgressBar.create` instead."
-
-    create *args
-  end
-
   def self.create(*args)
-    ProgressBar::Base.new *args
+    ProgressBar::Base.new(*args)
   end
 end

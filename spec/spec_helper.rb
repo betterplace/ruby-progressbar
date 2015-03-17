@@ -1,15 +1,6 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/spec/'
-end
-require 'rspec'
-require 'timecop'
+require 'rspectacular'
+require 'warning_filter'
 
-Dir[File.join(File.dirname(__FILE__), '..', 'lib', 'ruby-progressbar.rb')].each {|f| require f}
-Dir[File.join(File.dirname(__FILE__), '..', 'spec', 'support', '**', '*.rb')].each {|f| require f}
-
-RSpec.configure do |c|
-  c.treat_symbols_as_metadata_keys_with_true_values = true
-
-  c.mock_with :rspec
+RSpec.configure do |config|
+  config.warnings = true
 end
