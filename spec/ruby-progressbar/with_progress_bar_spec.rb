@@ -1,11 +1,12 @@
 require 'spec_helper'
-require 'progress_bar/with_progress_bar'
+require 'ruby-progressbar/with_progress_bar'
 
 describe 'with_progress_bar' do
   let :output do
     double('output').tap do |o|
-      o.should_receive(:print).at_least(1)
-      o.should_receive(:flush).at_least(1)
+      expect(o).to receive(:print).at_least(1)
+      expect(o).to receive(:flush).at_least(1)
+      allow(o).to receive(:tty?).and_return true
     end
   end
 
@@ -19,48 +20,48 @@ describe 'with_progress_bar' do
     end
 
     it "derives total from progress_bar_total method" do
-      progress_bar.should be_nil
+      expect(progress_bar).to be_nil
       def collection.progress_bar_total
         size
       end
-      collection.should_receive(:progress_bar_total).and_call_original
+      expect(collection).to receive(:progress_bar_total).and_call_original
       collection.with_progress_bar(:output => output)
-      progress_bar.total.should eq 3
+      expect(progress_bar.total).to eq 3
     end
 
     it "derives total from size" do
-      progress_bar.should be_nil
+      expect(progress_bar).to be_nil
       class << collection
         undef_method :length
       end
-      collection.should_receive(:size).and_call_original
+      expect(collection).to receive(:size).and_call_original
       collection.with_progress_bar(:output => output)
-      progress_bar.total.should eq 3
+      expect(progress_bar.total).to eq 3
     end
 
     it "derives total from length" do
-      progress_bar.should be_nil
+      expect(progress_bar).to be_nil
       class << collection
         undef_method :size
       end
-      collection.should_receive(:length).and_call_original
+      expect(collection).to receive(:length).and_call_original
       collection.with_progress_bar(:output => output)
-      progress_bar.total.should eq 3
+      expect(progress_bar.total).to eq 3
     end
 
     it "derives total from length if size returns nil" do
-      progress_bar.should be_nil
+      expect(progress_bar).to be_nil
       class << collection
         def size
         end
       end
-      collection.should_receive(:length).and_call_original
+      expect(collection).to receive(:length).and_call_original
       collection.with_progress_bar(:output => output)
-      progress_bar.total.should eq 3
+      expect(progress_bar.total).to eq 3
     end
 
     it "derives total from count" do
-      progress_bar.should be_nil
+      expect(progress_bar).to be_nil
       class << collection
         old_size = instance_method(:size)
         define_method :count do
@@ -69,52 +70,52 @@ describe 'with_progress_bar' do
         undef_method :size
         undef_method :length
       end
-      collection.should_receive(:count).and_call_original
+      expect(collection).to receive(:count).and_call_original
       collection.with_progress_bar(:output => output)
-      progress_bar.total.should eq 3
+      expect(progress_bar.total).to eq 3
     end
   end
 
   it "works for simple iteration and block" do
     s = 0
     (0...10).with_progress_bar(:output => output) do |i|
-      progress_bar.progress.should eq i
+      expect(progress_bar.progress).to eq i
       s += i
     end
-    progress_bar.progress.should eq 10
-    s.should eq 45
+    expect(progress_bar.progress).to eq 10
+    expect(s).to eq 45
   end
 
   it "works for simple iteration" do
     s = 0
     (0...10).with_progress_bar(:output => output).each do |i|
-      progress_bar.progress.should eq i
+      expect(progress_bar.progress).to eq i
       s += i
     end
-    progress_bar.progress.should eq 10
-    s.should eq 45
+    expect(progress_bar.progress).to eq 10
+    expect(s).to eq 45
   end
 
   it "works with implicit increment and block" do
     s = 0
     (0...10).with_progress_bar(:output => output) do |i|
-      progress_bar.progress.should eq i
+      expect(progress_bar.progress).to eq i
       progress_bar.increment
       s += i
     end
-    progress_bar.progress.should eq 10
-    s.should eq 45
+    expect(progress_bar.progress).to eq 10
+    expect(s).to eq 45
   end
 
   it "works with implicit increment" do
     s = 0
     (0...10).with_progress_bar(:output => output).each do |i|
-      progress_bar.progress.should eq i
+      expect(progress_bar.progress).to eq i
       progress_bar.increment
       s += i
     end
-    progress_bar.progress.should eq 10
-    s.should eq 45
+    expect(progress_bar.progress).to eq 10
+    expect(s).to eq 45
   end
 
   it "works with slices" do
@@ -122,34 +123,34 @@ describe 'with_progress_bar' do
     for slice in (0...10).with_progress_bar(:output => output).each_slice(3)
       s += slice[0, 3].compact.reduce(:+)
     end
-    progress_bar.progress.should eq 10
-    s.should eq 45
+    expect(progress_bar.progress).to eq 10
+    expect(s).to eq 45
   end
 
   it "works with skipping and block" do
     s = 0
     (0...10).with_progress_bar(:output => output) do |i|
-      progress_bar.progress.should eq i / 2
+      expect(progress_bar.progress).to eq i / 2
       if i % 2 == 0
         progress_bar.skip
       end
       s += i
     end
-    progress_bar.progress.should eq 5
-    s.should eq 25
+    expect(progress_bar.progress).to eq 5
+    expect(s).to eq 25
   end
 
   it "works with skipping" do
     s = 0
     (0...10).with_progress_bar(:output => output).each do |i|
-      progress_bar.progress.should eq i / 2
+      expect(progress_bar.progress).to eq i / 2
       if i % 2 == 0
         progress_bar.skip
       end
       s += i
     end
-    progress_bar.progress.should eq 5
-    s.should eq 25
+    expect(progress_bar.progress).to eq 5
+    expect(s).to eq 25
   end
 
   it "cannot iterate over objects that don't implement #each" do

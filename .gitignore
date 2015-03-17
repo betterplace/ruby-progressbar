@@ -71,7 +71,7 @@ tmp
 dump.rdb
 
 # Always keep Gemfile.lock
-!Gemfile.lock
+Gemfile.lock
 
 # Always Version .keep and .gitkeep files
 !.keep

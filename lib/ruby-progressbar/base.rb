@@ -33,6 +33,7 @@ class   Base
 
     self.output       = Output.detect(options.merge(:bar => self))
     @format           = Format::String.new(output.resolve_format(options[:format]))
+    @progress_touched = false
 
     start :at => options[:starting_at] if autostart
   end
@@ -46,6 +47,7 @@ class   Base
   end
 
   def finish
+    @progress_touched = true
     output.with_refresh do
       self.finished = true
       progressable.finish
@@ -66,6 +68,7 @@ class   Base
   end
 
   def reset
+    @progress_touched = true
     output.with_refresh do
       self.finished = false
       progressable.reset
@@ -88,14 +91,17 @@ class   Base
   end
 
   def decrement
+    @progress_touched = true
     update_progress(:decrement)
   end
 
   def increment
+    @progress_touched = true
     update_progress(:increment)
   end
 
   def progress=(new_progress)
+    @progress_touched = true
     update_progress(:progress=, new_progress)
   end
 
@@ -136,6 +142,16 @@ class   Base
   end
 
   alias_method :format, :format=
+
+  attr_writer :progress_touched
+
+  def progress_touched?
+    @progress_touched
+  end
+
+   def skip
+     throw :progress_bar_skip
+   end
 
   protected
 
